@@ -2,7 +2,7 @@
 // @name        QSEO-tools-Google
 // @namespace   http://qseo.ru
 // @description  Different SEO Tools and helper functions for Google Search engine from qseo.ru 
-// @version     1.0
+// @version     1.1
 // @updateURL   https://github.com/Qseo/QSEO-tools-Google/raw/master/QSEO-tools-Google/QSEO-tools-Google.user.js
 // @downloadURL https://github.com/Qseo/QSEO-tools-Google/raw/master/QSEO-tools-Google/QSEO-tools-Google.user.js
 // @include     http*://www.google.*/*
@@ -12,7 +12,7 @@
 // @grant GM_setValue
 // ==/UserScript==
 
-var regionStr_default_google = '-1:Автоматически;Нижний Новгород:Н.Новгород;Москва:Москва;Санкт Петербург:С-Петербург;Нижегородская область:Нижегор.обл;Самара:Самара;Дзержинск:Дзержинск;Кстово:Кстово';
+var regionStr_default_google = '-1:Автоматически;Нижний Новгород:Н.Новгород;Москва:Москва;Санкт Петербург:С-Петербург;Самара:Самара;Дзержинск:Дзержинск';
 
 var color_context = '#FFF8E1';
 var color_service = '#EDFCFF';
@@ -253,6 +253,9 @@ var Base64 = {
 
 
 window.qseoToolsParse = function(event) {
+    // alert('parse');
+    if($("img.rg_i").length) return;
+    
     qseoToolsUpdateUrlParams();
     
     var serp_number = 0;
@@ -365,21 +368,23 @@ window.qseoToolsParse = function(event) {
 
 //         alert(google_region_change + " » " + google_region_change_encoded + " » " + google_pref_cookie.indexOf('L=1') +  " »» " + google_pref_cookie);
 
-        $.cookie.raw = true
-        $.cookie('PREF', google_pref_cookie, {path: "/", domain: ".google.ru"});
+        $.cookie.raw = true;
+        
+        var cookie_host = '.' + window.location.hostname.replace('www.','');
+        
+        $.cookie('PREF', google_pref_cookie, {path: "/", domain: cookie_host});
         
         //alert($.cookie('PREF'));
-        location.reload();
+        location.reload(true);
         return false;
     });
-    //alert(google_region);
     
     }
     }
 }
 // setTimeout(window.qseoToolsParse,5);
- window.qseoToolsParse();
+window.qseoToolsParse();
 
- 
- 
-addEventListener('DOMNodeInserted', qseoToolsParse, false); 
+$('#main').get(0).addEventListener('DOMNodeInserted', qseoToolsParse, false); 
+
+// addEventListener('DOMNodeInserted', qseoToolsParse, false); 
