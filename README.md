@@ -51,3 +51,9 @@ Description in Russian
 
 Changelog
 ------------------------
+2014-03-05 - версия 1.0. Первая публичная версия
+
+
+Скриншот с примером работы скрипта:
+------------------------
+![Скриншот с примером работы скрипта](https://github.com/Qseo/QSEO-tools-Google/raw/master/qseo-tools-google-screenshot.png)

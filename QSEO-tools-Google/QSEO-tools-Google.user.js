@@ -361,7 +361,7 @@ window.qseoToolsParse = function(event) {
         } else {
           google_pref_cookie = google_pref_cookie.replace(":S=", ":L=1" + google_region_change_encoded + ":S=");
         }
-        google_pref_cookie = google_pref_cookie.replace(/TM=\d+/,"TM=" + Date.now() / 1000);
+        //google_pref_cookie = google_pref_cookie.replace(/TM=\d+/,"TM=" + Date.now() / 1000);
 
 //         alert(google_region_change + " » " + google_region_change_encoded + " » " + google_pref_cookie.indexOf('L=1') +  " »» " + google_pref_cookie);
 
