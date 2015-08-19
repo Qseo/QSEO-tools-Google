@@ -2,6 +2,7 @@
 // @name        QSEO-tools-Google
 // @namespace   http://qseo.ru
 // @description  Different SEO Tools and helper functions for Google Search engine from qseo.ru 
+// @icon          http://qseo.ru/logo/logo_q.svg
 // @version     1.1
 // @updateURL   https://github.com/Qseo/QSEO-tools-Google/raw/master/QSEO-tools-Google/QSEO-tools-Google.user.js
 // @downloadURL https://github.com/Qseo/QSEO-tools-Google/raw/master/QSEO-tools-Google/QSEO-tools-Google.user.js
