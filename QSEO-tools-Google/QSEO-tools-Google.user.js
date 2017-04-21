@@ -3,7 +3,7 @@
 // @namespace   http://qseo.ru
 // @description  Different SEO Tools and helper functions for Google Search engine from qseo.ru 
 // @icon          http://qseo.ru/logo/logo_q.svg
-// @version     1.2
+// @version     1.2.1
 // @updateURL   https://github.com/Qseo/QSEO-tools-Google/raw/master/QSEO-tools-Google/QSEO-tools-Google.user.js
 // @downloadURL https://github.com/Qseo/QSEO-tools-Google/raw/master/QSEO-tools-Google/QSEO-tools-Google.user.js
 // @include     http*://www.google.*/*
@@ -250,10 +250,14 @@ var Base64 = {
 
 
 /* serp numbers */
-window.qseoToolsParse = function(event) {
+window.qseoToolsParse = function(event, forcecheck) {
   if($("img.rg_i").length) return;
 
   qseoToolsUpdateUrlParams();
+
+  if( (forcecheck == 'undefined' || !forcecheck) && $(".qseo-place-number").length )  {
+    return;
+  }
 
   var serp_number = 0;
 
@@ -340,7 +344,7 @@ window.qseoToolsParse = function(event) {
     $("body").prepend($(regionsListCurrent));
 
     $('#qseo-google-regionlist a.qseo-update').click(function() {
-      window.qseoToolsParse();
+      window.qseoToolsParse(event,true);
     });
 
     $('#qseo-google-regionlist a.qseo-settings').click(function() {
