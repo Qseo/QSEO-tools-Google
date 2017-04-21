@@ -3,7 +3,7 @@
 // @namespace   http://qseo.ru
 // @description  Different SEO Tools and helper functions for Google Search engine from qseo.ru 
 // @icon          http://qseo.ru/logo/logo_q.svg
-// @version     1.1
+// @version     1.2
 // @updateURL   https://github.com/Qseo/QSEO-tools-Google/raw/master/QSEO-tools-Google/QSEO-tools-Google.user.js
 // @downloadURL https://github.com/Qseo/QSEO-tools-Google/raw/master/QSEO-tools-Google/QSEO-tools-Google.user.js
 // @include     http*://www.google.*/*
@@ -21,7 +21,7 @@ var color_warning = '#ffe5e5';
 
 var regionStr;
 
-var regionBlock = '<div id="qseo-yandex-regionlist" style="font-size: 11px; position: absolute; z-index: 1000; top: 130px; left: 10px;"><div class="region-default">Регион в настройках: <div class="region-name">[regiondefault]</div><br/></div><div class="list-title">Сменить на:</div><div class="list-items">[regionlist]</div><div class="settings">[<a class="settings" style="text-decoration: none;" href="#">настроить</a>]</div><div class="links" style="margin-top: 10px"><a href="http://qseo.ru/?utm_source=qseo-tools&utm_medium=banner&utm_campaign=qseo-tools-yandex" target="_blank" title="Качественное продвижение сайтов в сети Интернет"><img src="http://qseo.ru/logo/qseo_logo_w70.png?utm_source=qseo-tools&utm_medium=banner&utm_campaign=qseo-tools-yandex&utm_content=logo_left" alt="Качественное продвижение сайтов в сети Интернет"></a></div></div>';
+var regionBlock = '<div id="qseo-google-regionlist" style="font-size: 11px; position: absolute; z-index: 1000; top: 130px; left: 10px;"><div class="region-default">Регион в настройках: <div class="region-name">[regiondefault]</div><br/></div><div class="list-title">Сменить на:</div><div class="list-items">[regionlist]</div><div class="settings">[<a class="qseo-update" style="text-decoration: none;" href="#">обновить</a>] [<a class="qseo-settings" style="text-decoration: none;" href="#">настроить</a>]</div><div class="links" style="margin-top: 10px"><a href="http://qseo.ru/?utm_source=qseo-tools&utm_medium=banner&utm_campaign=qseo-tools-google" target="_blank" title="Качественное продвижение сайтов в сети Интернет"><img src="http://qseo.ru/logo/qseo_logo_w70.png?utm_source=qseo-tools&utm_medium=banner&utm_campaign=qseo-tools-google&utm_content=logo_left" alt="Качественное продвижение сайтов в сети Интернет"></a></div></div>';
 
 var urlParams;
 
@@ -30,7 +30,6 @@ if(typeof GM_getValue == undefined || GM_getValue('regionStr_google') == null) {
 } else {
     regionStr = GM_getValue('regionStr_google',regionStr_default_google);
 }
-
 
 window.qseoToolsUpdateUrlParams = function() {
     var match,
@@ -251,138 +250,106 @@ var Base64 = {
 
 
 /* serp numbers */
-
-
 window.qseoToolsParse = function(event) {
-    // alert('parse');
-    if($("img.rg_i").length) return;
-    
-    qseoToolsUpdateUrlParams();
-    
-    var serp_number = 0;
-    if(urlParams['start']) {
-      serp_number = urlParams['start'];
-    }
-    
-    var serp_result = document.getElementById('res');
-    
-    
-    if (serp_result) {
+  if($("img.rg_i").length) return;
 
-    if($(".qseo-place-number").length) return;
+  qseoToolsUpdateUrlParams();
+
+  var serp_number = 0;
+
+  if(urlParams['start']) {
+    serp_number = urlParams['start'];
+  }
+
+  var serp_result = document.getElementById('res');
+    
+    
+  if (serp_result) {
+
+    $("#qseo-google-regionlist").remove();
+    $(".qseo-place-number").remove();
+
     //Create Array of All HTML Tags
-    var allLiTags = serp_result.getElementsByTagName("li");
+    var allLiTags = serp_result.getElementsByTagName("div");
 
     for (i = 0; i < allLiTags.length; i++) {
-        if (allLiTags[i].className == 'g' || allLiTags[i].className == 'g w0') {
-            //if (allLiTags[i].id == 'imagebox_bigimages')
-            if (allLiTags[i].id == 'imagebox_bigimages' || allLiTags[i].id == 'newsbox') {
-                continue;
-            }
-
-            var h3 = allLiTags[i].getElementsByTagName('h3');
-            if(!h3[0]) {
-                continue;
-            }
-
-            serp_number++;
-            
-                var t = document.createElement('div');
-                t.setAttribute('style', 'float: left; margin-left: -30px; padding-top: 5px; text-align: right; width: 24px;');
-                t.setAttribute('class', 'qseo-place-number');
-                t.innerHTML = serp_number + '.';
-                allLiTags[i].insertBefore(t, allLiTags[i].firstChild);
+      if (allLiTags[i].className == 'g' || allLiTags[i].className == 'g w0') {
+        if (allLiTags[i].id == 'imagebox_bigimages' || allLiTags[i].id == 'newsbox') {
+            continue;
         }
-     }
-    
-    var qseo_block = document.getElementById('qseo-yandex-regionlist');
-    
-    if(!qseo_block) {
+
+        var h3 = allLiTags[i].getElementsByTagName('h3');
+
+        if(!h3[0]) {
+            continue;
+        }
+
+        serp_number++;
+
+        var t = document.createElement('div');
+
+        t.setAttribute('style', 'float: left; margin-left: -30px; padding-top: 5px; text-align: right; width: 24px;');
+        t.setAttribute('class', 'qseo-place-number');
+        t.innerHTML = serp_number + '.';
+
+        allLiTags[i].insertBefore(t, allLiTags[i].firstChild);
+      }
+    }
 
     var regionsListCurrent, google_region;
-    
-    var google_pref = $.cookie('PREF').split(':');
-    
-    //alert($.cookie('PREF'));
 
-    for (i = 0; i < google_pref.length; i++) {
-        item = google_pref[i].split('=');
-        //alert(item[0]+ ' === '+ item[1]);
-        if(item[0] == 'L') {
-          //alert('Строка региона:  ' + $item[1].substr(1));
-          google_region = Base64.decode(item[1].substr(1)).trim();
-          //alert(google_region);
-        }
-    } 
-    
-    if(!google_region ) {
-      google_region = '-1';
-    }
-    
-        if(regionStr) {
-            
-            var regionList = regionStr.split(';');
-            
-            var regionListKeys = [];
-            
-            var regionsListCurrent = '';    
-            
-            for(key in regionList) {
-                if(!regionList[key]) continue;
-                
-                region = regionList[key].split(':');
-                
-                str = '<a style="text-decoration: none" class="qseo-google-regionswitch" href="#' + region[0] + '" >' + region[1] + '</a>'; 
-                
+    var match = location.href.match(/&near=([^&]*)/);
+
+    google_region = (match && match[1]) ? decodeURI(match[1]) : -1;
+
+    if(regionStr) {
+      var regionList = regionStr.split(';');
+
+      var regionListKeys = [];
+
+      var regionsListCurrent = '';
+
+      for(key in regionList) {
+          if(!regionList[key]) continue;
+
+          region = regionList[key].split(':');
+
+          str = '<a style="text-decoration: none" class="qseo-google-regionswitch" href="' + location.href.replace(/&near=[^&]*/, '') + '&near=' + region[0] + '" >' + region[1] + '</a>';
+
 //                 alert(google_region + google_region.length + '  == ' + region[0] + region[0].length +  ' = ' + (google_region == region[0]));
-                if(google_region == region[0]) {
+          if(google_region == region[0]) {
 //                   alert(google_region + ' == ' + region[0]);
-                  str = '<div style="background: #FFF8DC; display: table-cell"><strong>' + str + '</strong>'; 
-                }
-                str = '<div style="line-height: 1.7em">' + str + '</div>'; 
-                regionsListCurrent = regionsListCurrent + str; 
-            }
-            
-             regionsListCurrent = regionBlock.replace('[regionlist]',regionsListCurrent);
-        } else {
-            regionsListCurrent = regionBlock.replace('[regionlist]','[не настроено]');
-        }
-    if(google_region == -1) google_region = 'Автоматически';
+            str = '<div style="background: #FFF8DC; display: table-cell"><strong>' + str + '</strong>';
+          }
+          str = '<div style="line-height: 1.7em">' + str + '</div>';
+          regionsListCurrent = regionsListCurrent + str;
+      }
+
+     regionsListCurrent = regionBlock.replace('[regionlist]',regionsListCurrent);
+    }
+    else {
+        regionsListCurrent = regionBlock.replace('[regionlist]','[не настроено]');
+    }
+
+    if(google_region == -1) {
+      google_region = 'Автоматически';
+    }
+
     regionsListCurrent = regionsListCurrent . replace('[regiondefault]',  google_region);
-    
+
     $("body").prepend($(regionsListCurrent));
 
-    $('.qseo-google-regionswitch').click(function() {
-        var google_pref_cookie = $.cookie('PREF');
-        
-        var google_region_change = $(this).attr('href').substr(1);
-        var google_region_change_encoded = Base64.encode(google_region_change).replace('=','');
-        
-        
-        // alert("new " + google_region_change + " cookie " + google_pref_cookie);
-        if(google_pref_cookie.indexOf('L=1') > 0 ) {
-          google_pref_cookie = google_pref_cookie.replace(/L=[^:]+/,"L=1" + google_region_change_encoded);
-        } else {
-          google_pref_cookie = google_pref_cookie.replace(":S=", ":L=1" + google_region_change_encoded + ":S=");
-        }
-        //google_pref_cookie = google_pref_cookie.replace(/TM=\d+/,"TM=" + Date.now() / 1000);
-
-//         alert(google_region_change + " » " + google_region_change_encoded + " » " + google_pref_cookie.indexOf('L=1') +  " »» " + google_pref_cookie);
-
-        $.cookie.raw = true;
-        
-        var cookie_host = '.' + window.location.hostname.replace('www.','');
-        
-        $.cookie('PREF', google_pref_cookie, {path: "/", domain: cookie_host});
-        
-        //alert($.cookie('PREF'));
-        location.reload(true);
-        return false;
+    $('#qseo-google-regionlist a.qseo-update').click(function() {
+      window.qseoToolsParse();
     });
-    
-    }
-    }
+
+    $('#qseo-google-regionlist a.qseo-settings').click(function() {
+      regionStr = prompt("Настройка списка регионов (формат: id1:name1;id2:name2;id3:name3): ", regionStr);
+      GM_setValue('regionStr', regionStr);
+    });
+  }
 }
+
 // setTimeout(window.qseoToolsParse,5);
 window.qseoToolsParse();
 
